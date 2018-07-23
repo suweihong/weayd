@@ -14,6 +14,7 @@ class EstimatesController extends Controller
     	$client_id = $request->client_id;
     	$content = $request->content;
     	$store_id = $request->store_id;
+    	$order_id = $request->order_id;
     	$environment = $request->environment;
     	$service = $request->service;
     	$average = ($environment + $service) / 2;
@@ -22,6 +23,7 @@ class EstimatesController extends Controller
     		'client_id' => $client_id,
     		'content' => $content,
     		'store_id' => $store_id,
+    		'order_id' => $order_id,
     		'environment' => $environment,
     		'service' => $service,
     		'average' => $average,

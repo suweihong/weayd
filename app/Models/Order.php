@@ -42,4 +42,15 @@ class Order extends Model
     {
         return $this->belongsToMany('App\Models\Place', 'field_order', 'order_id', 'place_id')->withTimestamps();
     }
+
+     //该订单所属用户
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Client');
+    }
+    //该订单的支付方式
+    public function payment()
+    {
+    	return $this->belongsTo('App\Models\Payment');
+    }
 }

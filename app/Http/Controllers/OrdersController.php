@@ -25,8 +25,17 @@ class OrdersController extends Controller
         $client_id = $request->client_id;
         $orders = Order::where('client_id',$client_id)->orderBy('created_at','desc')->get();
         foreach ($orders as $key => $order) {
-            $f = $order->fields()->get();
-            dump($f);
+            $store = $order->store->title;//店铺名称
+            $total = $order->total;//订单价格
+            $date = strtotime($order->created_at);//下单时间
+            $week = date('N',$date);//下单时间为 周几
+            dump($date);
+            dump($week);
+            
+            // dump($store);
+            $fields = $order->fields()->get();//订单买的 商品
+
+            // dump($fields);
         }
         // dump($orders);
     }
