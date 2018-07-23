@@ -17,9 +17,18 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    //我的订单 列表
+    public function index(Request $request)
     {
         
+        $client_id = $request->client_id;
+        $orders = Order::where('client_id',$client_id)->orderBy('created_at','desc')->get();
+        foreach ($orders as $key => $order) {
+            $f = $order->fields()->get();
+            dump($f);
+        }
+        // dump($orders);
     }
 
     /**
@@ -38,6 +47,7 @@ class OrdersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    //添加订单
     public function store(Request $request)
     {
         // $place_id = $request->place_id;
