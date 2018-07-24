@@ -42,7 +42,7 @@ class OrdersController extends Controller
            
             $fields = $order->fields()->get();//订单买的 商品
             foreach ($fields as $ke => $field) {
-                 $date = $field->pivot->order_date;
+                $date = $field->pivot->order_date;
             dump($date);
             }
            
