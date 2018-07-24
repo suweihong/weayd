@@ -22,20 +22,30 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         
+        $now = date('Y-m-d H:i:s',time());
+        // dd($now);
         $client_id = $request->client_id;
         $orders = Order::where('client_id',$client_id)->orderBy('created_at','desc')->get();
+        $order_list = [];
         foreach ($orders as $key => $order) {
             $store = $order->store->title;//店铺名称
             $total = $order->total;//订单价格
-            $date = strtotime($order->created_at);//下单时间
-            $week = date('N',$date);//下单时间为 周几
-            dump($date);
-            dump($week);
-            
-            // dump($store);
+            $time = strtotime($order->created_at);//下单时间
+            $week = date('N',$time);//下单时间为 周几
+            $date = (string)$order->created_at;
+            $order_list = [
+                'store_title'=>$store,
+                'total' => $total,
+                'week' => $week,
+                ];
+                // dump($order_list);
+           
             $fields = $order->fields()->get();//订单买的 商品
-
-            // dump($fields);
+            foreach ($fields as $ke => $field) {
+                 $date = $field->pivot->order_date;
+            dump($date);
+            }
+           
         }
         // dump($orders);
     }
@@ -59,8 +69,6 @@ class OrdersController extends Controller
     //添加订单
     public function store(Request $request)
     {
-        // $place_id = $request->place_id;
-        // $place_num = $request->place_num;
         $week = $request->week;
         $date = $request->date;
         $payment_id = $request->pay_id;

@@ -35,7 +35,7 @@ class Order extends Model
     //获取该订单包括的商品
     public function fields()
     {
-    	return $this->belongsToMany('App\Models\Field','field_order')->withPivot('place_num','time')->withTimestamps();
+    	return $this->belongsToMany('App\Models\Field','field_order','order_id','field_id')->withPivot('place_num','time','order_date')->withTimestamps();
     }
     //获取该订单包括的 场地
     public function places()
