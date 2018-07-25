@@ -26,7 +26,18 @@ class LoginController extends Controller
     	
     	
     		//商家列表
-    	$stores = Store::where('switch',1)->get()->take(5);
+    	$type_id = $request->type_id;
+    	$type_id = 2;
+    	if($type_id){
+    			//指定运动品类
+    		$type = Type::find($type_id);
+    		$stores = $type->stores()->orderBy('created_at','asc')->get()->unique();   		
+    	}else{
+    			//没 指定运动品类
+    		$stores = Store::where('switch',1)->get()->take(5);
+    		
+    	}
+    	
     	foreach ($stores as $key => $store) {
     			//	该商家的 运动品类
     		$type = $store->types()->get()->unique();
@@ -38,19 +49,13 @@ class LoginController extends Controller
     			//免费体验标签
     		$price_min = $store->fields()->pluck('price')->min();
     		if(!$price_min || $price_min == 0){
+    			//免费
     			dump(88);
     		}else{
     			dump($price_min);
     		}
     		
- 
-
     	}
-    	
-    	
-
-
-
 
     }
 }
