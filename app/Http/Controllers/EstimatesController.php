@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Estimate;
+use App\Models\Store;
 
 class EstimatesController extends Controller
 {
@@ -45,9 +46,14 @@ class EstimatesController extends Controller
     {
     	
     	$store_id = $request->store_id;
+        $store = Store::find($store_id);
 
-    	$estimates = Estimate::where('store_id',$store_id)->where('check_id',6)->orderBy('created_at','desc')->get();
+    	$estimates = $store->estimates()->where('check_id',6)->orderBy('created_at','desc')->get();
 
     	dump($estimates);
+        return response()->json([
+            'errcode' => 1,
+            'estimates' => $estimates,
+        ],200);
     }
 }

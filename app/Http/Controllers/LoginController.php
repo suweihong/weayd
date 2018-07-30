@@ -31,31 +31,41 @@ class LoginController extends Controller
     	if($type_id){
     			//指定运动品类
     		$type = Type::find($type_id);
-    		$stores = $type->stores()->orderBy('created_at','asc')->get()->unique();   		
+    		$stores = $type->stores()->orderBy('created_at','asc')->where('switch',1)->get()->unique();   		
     	}else{
     			//没 指定运动品类
     		$stores = Store::where('switch',1)->get()->take(5);
     		
     	}
-    	
+
+    	$stores_list = [];
     	foreach ($stores as $key => $store) {
     			//	该商家的 运动品类
-    		$type = $store->types()->get()->unique();
-   
+    		$types = $store->types()->get()->unique();
+    		
     			//	该商家的 平均 评分
     		$average = $store->estimates()->get()->pluck('average')->avg();
-    		// dump($average);
+    	
 
     			//免费体验标签
     		$price_min = $store->fields()->pluck('price')->min();
-    		if(!$price_min || $price_min == 0){
-    			//免费
-    			dump(88);
-    		}else{
-    			dump($price_min);
-    		}
+    	
+    		$stores_list[$key]['store_title'] = $store->title;
+    		$stores_list[$key]['types'] = $types;
+    		$stores_list[$key]['average'] = $average;
+    		$stores_list[$key]['price_min'] = $price_min;
     		
     	}
+    	dump($stores_list);
+
+    	return response()->json([
+    		'errcode' => 1,
+    		'advertisement_main' => $advertisement_main,
+    		'advertisement_one' => $advertisement_one,
+    		'advertisement_second' => $advertisement_second,
+    		'stores' => $stores_list,
+
+    	],200);
 
     }
 }

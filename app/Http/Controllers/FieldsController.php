@@ -33,9 +33,9 @@ class FieldsController extends Controller
         setcookie(session_name(),session_id(),time()+$time,"/");
         $_SESSION['date']=$date;
 
-        $time = strtotime($date);
+        $date_time = strtotime($date);
         //要查询的那天是 周几
-        $week = date('N',$time);
+        $week = date('N',$date_time);
 
          //该店铺 该运动品类 的营业时间
         $store_hours = StoreType::where('store_id',$store_id)
@@ -78,12 +78,12 @@ class FieldsController extends Controller
         }
         $prices = $new_prices->groupBy('time')->sortBy('time');
 
-
         return response()->json([
             'errcode' => 1,
             'prices' => $prices,
             'start_time' => $start_time,
         ],200);
+        
     }
 
     /**
