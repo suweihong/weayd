@@ -79,7 +79,6 @@ class FieldsController extends Controller
         $prices = $new_prices->groupBy('time')->sortBy('time');
 
         return response()->json([
-            'errcode' => 1,
             'prices' => $prices,
             'start_time' => $start_time,
         ],200);
