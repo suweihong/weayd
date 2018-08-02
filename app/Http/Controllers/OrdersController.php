@@ -22,7 +22,7 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         
-        $now = date('Y-m-d H:i:s',time());
+        // $now = date('Y-m-d H:i:s',time());
         // dd($now);
         $client_id = $request->client_id;
         $orders = Order::where('client_id',$client_id)->orderBy('created_at','desc')->get();
@@ -33,23 +33,24 @@ class OrdersController extends Controller
             $time = strtotime($order->created_at);//下单时间
             $week = date('N',$time);//下单时间为 周几
             $date = (string)$order->created_at;
+            $status_id = $order->status_id;//订单状态
             $order_list = [
                 'store_title'=>$store,
                 'total' => $total,
                 'week' => $week,
+                'date' => $date,
+                'status_id' => $status_id,
                 ];
                 // dump($order_list);
            
-            $fields = $order->fields()->get();//订单买的 商品
-            foreach ($fields as $ke => $field) {
-                $date = $field->pivot->order_date;
-                $time = $field->pivot->time;
-                dump($time);
-            dump($date);
-            }
+           
            
         }
         // dump($orders);
+        return response()->json([
+            'errcode' => 1,
+            'orders' => $orders,
+        ],200);
     }
 
     /**
@@ -79,25 +80,25 @@ class OrdersController extends Controller
         $item_id = $request->item_id;
         $client_id = $request->client_id;
         $phone = $request->phone;
-        $fields = [
-            0 => [ 'field_id'=>1286,
-                   'place_id'=>64,
-                   'place_num'=>2,
-                   'time'=>2,
-                   'price'=>44],
-            1 => [ 'field_id'=>1300,
-                   'place_id'=>64,
-                   'place_num'=>2,
-                   'time'=>4,
-                   'price'=>33 ],
-            2 => [ 'field_id'=>1660,
-                   'place_id'=>12,
-                   'place_num'=>1,
-                   'time'=>5,
-                   'price'=>55 ],
+        // $fields = [
+        //     0 => [ 'field_id'=>1286,
+        //            'place_id'=>64,
+        //            'place_num'=>2,
+        //            'time'=>2,
+        //            'price'=>44],
+        //     1 => [ 'field_id'=>1300,
+        //            'place_id'=>64,
+        //            'place_num'=>2,
+        //            'time'=>4,
+        //            'price'=>33 ],
+        //     2 => [ 'field_id'=>1660,
+        //            'place_id'=>12,
+        //            'place_num'=>1,
+        //            'time'=>5,
+        //            'price'=>55 ],
 
 
-        ];
+        // ];
 
 
             //开启事务
@@ -194,9 +195,9 @@ class OrdersController extends Controller
      // 提交事务
     DB::commit();
 
-        dump($order);
-        dump($order_status);
-        dump($field_order);
+        // dump($order);
+        // dump($order_status);
+        // dump($field_order);
 
 
 
@@ -209,9 +210,28 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+
+    // 订单详情
+    public function show(Order $order)
     {
-        //
+        // dump($order);
+        $fields = $order->fields()->get();//订单买的 商品
+            foreach ($fields as $key => $field) {
+                $date = $field->pivot->order_date;//预定的场地日期
+                $time = $field->pivot->time;//预定的场地时间段
+                $place_num = $field->pivot->place_num;
+                // dump($place_num);
+            //     dump($time);
+            // dump($date);
+                $field['time'] = $time;
+                $field['place_num'] = $place_num;
+                $field['date'] = $date;
+            }
+            // dump($fields);
+            return response()->json([
+                'errcode' => 1,
+                'fields' => $fields,
+            ],200);
     }
 
     /**

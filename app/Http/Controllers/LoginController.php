@@ -27,7 +27,7 @@ class LoginController extends Controller
     	
     		//商家列表
     	$type_id = $request->type_id;
-    	$type_id = 2;
+      
     	if($type_id){
     			//指定运动品类
     		$type = Type::find($type_id);
@@ -56,7 +56,7 @@ class LoginController extends Controller
     		$stores_list[$key]['price_min'] = $price_min;
     		
     	}
-    	dump($stores_list);
+    	// dump($stores_list);
 
     	return response()->json([
     		'errcode' => 1,

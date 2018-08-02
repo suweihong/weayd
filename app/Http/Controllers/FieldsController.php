@@ -20,7 +20,7 @@ class FieldsController extends Controller
     public function index(Request $request)
     {
         $type_id = $request->type_id;
-        $item_id = $request->item_id ?? 1;
+        // $item_id = $request->item_id ?? 1;
         $store_id = $request->store_id;
 
          

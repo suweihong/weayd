@@ -16,10 +16,10 @@ class StoresController extends Controller
    	public function type_stores(Request $request)
    	{
    		$type_id = $request->type_id;
-   		$type_id = 2;
+   		// $type_id = 2;
    		$type = Type::find($type_id);
    		$stores = $type->stores()->where('switch',1)->orderBy('created_at','asc')->get()->unique();
-   		dump($stores);
+   		// dump($stores);
 
    	}
 
@@ -44,13 +44,13 @@ class StoresController extends Controller
                //该品类的 商品 票卡
             $item_id = StoreType::where('store_id',$store_id)->where('type_id',$type_id)->pluck('item_id');
 
-          
+         
             if($item_id[0] == 2){
-               $fields = $store->fields()->where('type_id',$type_id)->where('item_id',2)->get();
-               dump($fields);
+               $fields = $store->fields()->where('type_id',5)->where('item_id',2)->where('switch','!=',1)->get();
+               // dump($fields);
             }else{
                $fields = [];
-               dump(555);
+               // dump(555);
             }
 
             $types_list[$key]['type_name'] = $type_name;
@@ -59,7 +59,7 @@ class StoresController extends Controller
             $types_list[$key]['item_id'] = $item_id;
             $types_list[$key]['fields'] = $fields;
    		}
-         dump($types_list);
+         // dump($types_list);
    		
 
    			//场馆简介

@@ -32,7 +32,7 @@ class EstimatesController extends Controller
     		'average' => $average,
     		'check_id' => 3,
     	]);
-    	dump($res);
+    	// dump($res);
     	return response()->json([
     		'errcode' => 1,
     		'errmsg' => '评论成功',
@@ -50,7 +50,7 @@ class EstimatesController extends Controller
 
     	$estimates = $store->estimates()->where('check_id',6)->orderBy('created_at','desc')->get();
 
-    	dump($estimates);
+    	// dump($estimates);
         return response()->json([
             'errcode' => 1,
             'estimates' => $estimates,
