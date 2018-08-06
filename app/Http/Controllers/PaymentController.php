@@ -30,9 +30,10 @@ class PaymentController extends Controller
     //支付成功的页面
     public function pay_suc()
     {
+ 		
     	return response()->json([
     		'errcode' => 1,
-    		'errmsg' => '支付成功',
+    		'errmsg' => '支付成功的页面',
     	],200);
     }
 }

@@ -79,10 +79,8 @@ class StoresController extends Controller
          
             if($item_id[0] == 2){
                $fields = $store->fields()->where('type_id',5)->where('item_id',2)->where('switch','!=',1)->get();
-               // dump($fields);
             }else{
                $fields = [];
-               // dump(555);
             }
 
             $types_list[$key]['type_name'] = $type_name;
@@ -91,8 +89,7 @@ class StoresController extends Controller
             $types_list[$key]['item_id'] = $item_id;
             $types_list[$key]['fields'] = $fields;
    		}
-         // dump($types_list);
-   		
+
 
    			//场馆简介
    		$introduction = $store->introduction;

@@ -124,6 +124,7 @@ class OrdersController extends Controller
         }
 
         // 生成订单
+        $order_id = date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);//随机的 13位订单号
         $order = Order::create([
             'store_id' => $store_id,
             'status_id' => 4,//订单状态为  已完成
@@ -205,7 +206,7 @@ class OrdersController extends Controller
    
 
 
-    
+
 
 
 
