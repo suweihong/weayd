@@ -26,9 +26,22 @@ class PaymentController extends Controller
         ],200);   
     }
 
+    //支付的操作
+    public function pay(Request $request)
+    {
+    	$name = $request->name;
+    	$sex = $request->sex;
+    	$phone = $request->phone;
+
+    	dump($name);
+    	dump($sex);
+    	dump($phone);
+
+    }
+
 
     //支付成功的页面
-    public function pay_suc()
+    public function pay_suc(Request $request)
     {
  		
     	return response()->json([
