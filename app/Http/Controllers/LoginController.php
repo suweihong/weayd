@@ -59,8 +59,8 @@ class LoginController extends Controller
     	// dump($stores_list);
 
     	return response()->json([
-    		'errcode' => 1,
     		'advertisement_main' => $advertisement_main,
+            'types' => $types,
     		'advertisement_one' => $advertisement_one,
     		'advertisement_second' => $advertisement_second,
     		'stores' => $stores_list,

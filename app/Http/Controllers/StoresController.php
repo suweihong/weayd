@@ -21,6 +21,29 @@ class StoresController extends Controller
    		$stores = $type->stores()->where('switch',1)->orderBy('created_at','asc')->get()->unique();
    		// dump($stores);
 
+         $stores_list = [];
+         foreach ($stores as $key => $store) {
+               // 该商家的 运动品类
+            $types = $store->types()->get()->unique();
+            
+               // 该商家的 平均 评分
+            $average = $store->estimates()->get()->pluck('average')->avg();
+         
+
+               //免费体验标签
+            $price_min = $store->fields()->pluck('price')->min();
+         
+            $stores_list[$key]['store_title'] = $store->title;
+            $stores_list[$key]['types'] = $types;
+            $stores_list[$key]['average'] = $average;
+            $stores_list[$key]['price_min'] = $price_min;
+            
+         }
+
+         return response()->json([
+            'stores' => $stores_list,
+         ],200);
+
    	}
 
 
@@ -28,7 +51,16 @@ class StoresController extends Controller
    	public function store_show(Request $request)
    	{
    		$store_id = $request->store_id;
-   		$store = Store::find($store_id);
+         $title = $request->title;//店铺名称（首页搜索店铺）
+         if($store_id){
+            $store = Store::find($store_id);
+         }
+         if($title){
+            $store = Store::where('title',$title)->where('switch',1)->get();
+         }
+
+            // 该商家的 平均 评分
+         $average = $store->estimates()->get()->pluck('average')->avg();
 
    			//	该店的 所有 运动品类
    		$types = $store->types()->orderBy('created_at','asc')->get()->unique();
@@ -69,7 +101,8 @@ class StoresController extends Controller
    		$store_imgs = $store->imgs()->get();
 
          return response()->json([
-            'errcode' => 1,
+            'store' => $store,
+            'average' => $average,
             'types_list' => $types_list,
             'introduction' => $introduction,
             'store_imgs' => $store_imgs,

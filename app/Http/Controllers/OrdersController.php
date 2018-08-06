@@ -34,7 +34,7 @@ class OrdersController extends Controller
             $week = date('N',$time);//下单时间为 周几
             $date = (string)$order->created_at;
             $status_id = $order->status_id;//订单状态
-            $order_list = [
+            $order_list[$key] = [
                 'store_title'=>$store,
                 'total' => $total,
                 'week' => $week,
@@ -46,10 +46,10 @@ class OrdersController extends Controller
            
            
         }
-        // dump($orders);
+        // dump($order_list);
         return response()->json([
             'errcode' => 1,
-            'orders' => $orders,
+            'orders' => $order_list,
         ],200);
     }
 
@@ -74,12 +74,12 @@ class OrdersController extends Controller
     {
         $week = $request->week;
         $date = $request->date;
-        $payment_id = $request->pay_id;
+        // $payment_id = $request->pay_id;
         $type_id = $request->type_id;
         $store_id = $request->store_id;
         $item_id = $request->item_id;
         $client_id = $request->client_id;
-        $phone = $request->phone;
+        // $phone = $request->phone;
         // $fields = [
         //     0 => [ 'field_id'=>1286,
         //            'place_id'=>64,
@@ -126,13 +126,13 @@ class OrdersController extends Controller
         // 生成订单
         $order = Order::create([
             'store_id' => $store_id,
-            'status_id' => 3,//订单状态为  已完成
+            'status_id' => 4,//订单状态为  已完成
             'type_id' => $type_id,
-            'payment_id' => $payment_id,
+            // 'payment_id' => $payment_id,
             'date' => $date, //买的 是 哪天的 商品
             'item_id' =>$item_id,
             'client_id' => $client_id,
-            'phone' => $phone,
+            // 'phone' => $phone,
             'total' => $total,
             'collection' => $request->collection,
             'balance' => $total - $request->collection,
@@ -152,7 +152,7 @@ class OrdersController extends Controller
                   //生成订单状态的 数据
         $order_status = OrderStatus::create([
             'order_id' => $order->id,
-            'status_id' => 3,
+            'status_id' => 4,
             'store_id' => $store_id,
         ]);
 
@@ -195,14 +195,20 @@ class OrdersController extends Controller
      // 提交事务
     DB::commit();
 
-        // dump($order);
-        // dump($order_status);
-        // dump($field_order);
+    return response()->json([
+        'errcode' => 1,
+        'order' => $order,
+    ],200);
+ }
+
+
+   
+
+
+    
 
 
 
-
-    }
 
     /**
      * Display the specified resource.
@@ -220,9 +226,6 @@ class OrdersController extends Controller
                 $date = $field->pivot->order_date;//预定的场地日期
                 $time = $field->pivot->time;//预定的场地时间段
                 $place_num = $field->pivot->place_num;
-                // dump($place_num);
-            //     dump($time);
-            // dump($date);
                 $field['time'] = $time;
                 $field['place_num'] = $place_num;
                 $field['date'] = $date;
